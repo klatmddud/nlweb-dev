@@ -45,4 +45,3 @@ CLAUDE.md
 docker/docker-compose.local.yml
 docker/Dockerfile.local
 
-src/main/java/com/nlweb/core
