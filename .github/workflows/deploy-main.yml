@@ -34,6 +34,12 @@ jobs:
                   value: ${{ secrets.DATABASE_USERNAME }}
                 - name: DATABASE_PASSWORD
                   value: ${{ secrets.DATABASE_PASSWORD }}
+                - name: JWT_SECRET
+                  value: ${{ secrets.JWT_SECRET }}
+                - name: JWT_ACCESS_TOKEN_VALIDITY
+                  value: ${{ secrets.JWT_ACCESS_TOKEN_VALIDITY }}
+                - name: JWT_REFRESH_TOKEN_VALIDITY
+                  value: ${{ secrets.JWT_REFRESH_TOKEN_VALIDITY }}
               buildenv: []
             context:
               git:

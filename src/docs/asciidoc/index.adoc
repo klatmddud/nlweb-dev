@@ -1,0 +1,71 @@
+= NLWEB API Documentation
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[introduction]]
+== 소개
+
+이 문서는 NLWeb 백엔드 API의 상세 명세입니다.
+
+=== 기본 정보
+
+* Development URL: `https://port-0-nlweb-dev-mi2pu7awb67535f7.sel3.cloudtype.app`
+* Base URL: `http://localhost:8080`
+* 응답 형식: JSON
+* 문자 인코딩: UTF-8
+
+=== API 응답 형식
+
+모든 API는 다음과 같은 공통 응답 형식을 사용합니다:
+
+[source,json]
+----
+{
+  "success": true|false,
+  "data": {Object|Array|Null}
+  "message": "응답 메시지 (선택사항)",
+  "timestamp": "2025-01-01T06:00:00.000Z"
+}
+----
+
+=== HTTP 상태 코드
+
+|===
+| 상태 코드 | 설명
+| 200 | 요청 성공
+| 201 | 리소스 생성 성공
+| 400 | 잘못된 요청
+| 401 | 인증 실패
+| 403 | 권한 부족
+| 404 | 리소스 없음
+| 500 | 서버 오류
+|===
+
+[[amho-api]]
+== Amho API
+
+Amho(가입 인증 코드) 관리를 위한 API입니다.
+
+=== GET /amhos
+현재 활성화된 인증 코드를 반환합니다.
+
+.Request
+include::{snippets}/amhos/get-current-amho/http-request.adoc[]
+
+.Response
+include::{snippets}/amhos/get-current-amho/http-response.adoc[]
+
+=== POST /amhos
+현재 인증 코드를 리셋합니다.
+
+.Requst
+include::{snippets}/amhos/reset-current-amho/http-request.adoc[]
+
+.Response
+include::{snippets}/amhos/reset-current-amho/http-response.adoc[]

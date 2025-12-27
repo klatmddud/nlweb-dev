@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.1'
+    id 'org.springframework.boot' version '3.5.9'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.asciidoctor.jvm.convert' version '4.0.2'
     id 'org.flywaydb.flyway' version '10.21.0'
@@ -80,6 +80,34 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+ext {
+    set('snippetsDir', file('build/generated-snippets'))
+}
+
+asciidoctor {
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+tasks.register('copyDocs', Copy) {
+    dependsOn asciidoctor
+
+    doFirst {
+        delete('src/main/resources/static/docs/index.html')
+    }
+
+    from file('build/docs/asciidoc')
+    into file('src/main/resources/static/docs')
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+    finalizedBy copyDocs
+}
+
+tasks.named('build') {
+    dependsOn copyDocs
 }

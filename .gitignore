@@ -42,6 +42,8 @@ out/
 # Project documentation
 CLAUDE.md
 
+.DS_Store
+
 docker/docker-compose.local.yml
 docker/Dockerfile.local
 

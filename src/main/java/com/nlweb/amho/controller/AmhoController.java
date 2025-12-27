@@ -16,13 +16,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
-@RequestMapping("/amhos")
+@RequestMapping("/api/amhos")
 @RequiredArgsConstructor
 @Validated
 public class AmhoController {
 
     private final AmhoFacade amhoFacade;
 
+    /** 현재 인증 코드 반환 */
     @GetMapping
     public ResponseEntity<ApiResponse<AmhoObject>> getCurrentAmho(
             HttpServletRequest httpRequest) {
@@ -32,6 +33,7 @@ public class AmhoController {
                 .body(ApiResponse.success(response));
     }
 
+    /** 현재 인증 코드 리셋 */
     @PostMapping
     public ResponseEntity<ApiResponse<AmhoObject>> resetCurrentAmho(
             HttpServletRequest httpRequest) {

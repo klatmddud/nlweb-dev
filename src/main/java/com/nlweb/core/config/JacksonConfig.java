@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 @Configuration
 public class JacksonConfig {
 
-    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     @Bean
     @Primary
@@ -22,7 +23,11 @@ public class JacksonConfig {
 
         return JsonMapper.builder()
                 .addModule(module)
-                .build();
+                .defaultTimeZone(TimeZone.getTimeZone("UTC"))
+                .build()
+                .enable(com.fasterxml.jackson.core.JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN)
+                .enable(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT);
     }
 
 }
+ 
