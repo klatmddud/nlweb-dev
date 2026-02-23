@@ -1,0 +1,203 @@
+= NLWEB API Documentation
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[introduction]]
+== 소개
+
+이 문서는 NLWeb 백엔드 API의 상세 명세입니다.
+
+=== 기본 정보
+
+* Development URL: `https://port-0-nlweb-dev-mi2pu7awb67535f7.sel3.cloudtype.app`
+* Base URL: `http://localhost:8080`
+* 응답 형식: JSON
+* 문자 인코딩: UTF-8
+
+=== API 응답 형식
+
+모든 API는 다음과 같은 공통 응답 형식을 사용합니다:
+
+[source,json]
+----
+{
+  "success": true|false,
+  "data": {Object|Array|Null}
+  "message": "응답 메시지 (선택사항)",
+  "timestamp": "2025-01-01T06:00:00.000Z"
+}
+----
+
+=== HTTP 상태 코드
+
+|===
+| 상태 코드 | 설명
+| 200 | 요청 성공
+| 201 | 리소스 생성 성공
+| 400 | 잘못된 요청
+| 401 | 인증 실패
+| 403 | 권한 부족
+| 404 | 리소스 없음
+| 500 | 서버 오류
+|===
+
+[[amho-api]]
+== Amho API
+
+Amho(가입 인증 코드) 관리를 위한 API입니다.
+
+=== GET /amhos
+현재 활성화된 인증 코드를 반환합니다.
+
+.Request
+include::{snippets}/amhos/get-current-amho/http-request.adoc[]
+
+.Response
+include::{snippets}/amhos/get-current-amho/http-response.adoc[]
+
+=== POST /amhos
+현재 인증 코드를 리셋합니다.
+
+.Requst
+include::{snippets}/amhos/reset-current-amho/http-request.adoc[]
+
+.Response
+include::{snippets}/amhos/reset-current-amho/http-response.adoc[]
+
+[[auth-api]]
+== Auth API
+
+회원가입, 로그인 등 사용자 인증 관리를 위한 API 입니다.
+
+=== POST /auth/register
+회원가입을 진행합니다.
+
+.Request
+include::{snippets}/auth/register/http-request.adoc[]
+
+.Response
+include::{snippets}/auth/register/http-response.adoc[]
+
+=== POST /auth/login
+로그인을 진행합니다.
+
+.Request
+include::{snippets}/auth/login/http-request.adoc[]
+
+.Response
+include::{snippets}/auth/login/http-response.adoc[]
+
+[[user-api]]
+== User API
+
+사용자 프로필 조회/수정/삭제 및 사용자 검색을 위한 API 입니다.
+
+=== GET /users/me
+내 프로필을 조회합니다.
+
+.Request
+include::{snippets}/users/get-my-profile/http-request.adoc[]
+
+.Response
+include::{snippets}/users/get-my-profile/http-response.adoc[]
+
+=== PATCH /users/me
+내 프로필을 수정합니다.
+
+.Request
+include::{snippets}/users/update-my-profile/http-request.adoc[]
+
+.Response
+include::{snippets}/users/update-my-profile/http-response.adoc[]
+
+=== DELETE /users/me
+내 프로필을 삭제(탈퇴)합니다.
+
+.Request
+include::{snippets}/users/delete-my-profile/http-request.adoc[]
+
+.Response
+include::{snippets}/users/delete-my-profile/http-response.adoc[]
+
+=== GET /users
+세션/기수 기준으로 사용자를 검색합니다.
+
+.Request
+include::{snippets}/users/search-users/http-request.adoc[]
+
+.Response
+include::{snippets}/users/search-users/http-response.adoc[]
+
+[[event-api]]
+== Event API
+
+이벤트 생성/조회/수정/삭제 및 활성 상태 관리를 위한 API 입니다.
+
+=== POST /events
+새 이벤트를 생성합니다.
+
+.Request
+include::{snippets}/events/create-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/create-event/http-response.adoc[]
+
+=== GET /events/{eventId}
+이벤트 상세를 조회합니다.
+
+.Request
+include::{snippets}/events/get-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/get-event/http-response.adoc[]
+
+=== GET /events
+이벤트 목록을 조회합니다.
+
+.Request
+include::{snippets}/events/get-events/http-request.adoc[]
+
+.Response
+include::{snippets}/events/get-events/http-response.adoc[]
+
+=== PATCH /events/{eventId}
+이벤트 정보를 수정합니다.
+
+.Request
+include::{snippets}/events/update-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/update-event/http-response.adoc[]
+
+=== PATCH /events/{eventId}/activate
+이벤트를 활성화합니다.
+
+.Request
+include::{snippets}/events/activate-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/activate-event/http-response.adoc[]
+
+=== PATCH /events/{eventId}/deactivate
+이벤트를 비활성화합니다.
+
+.Request
+include::{snippets}/events/deactivate-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/deactivate-event/http-response.adoc[]
+
+=== DELETE /events/{eventId}
+이벤트를 삭제합니다.
+
+.Request
+include::{snippets}/events/delete-event/http-request.adoc[]
+
+.Response
+include::{snippets}/events/delete-event/http-response.adoc[]

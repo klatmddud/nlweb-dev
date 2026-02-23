@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.1'
+    id 'org.springframework.boot' version '3.5.9'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.asciidoctor.jvm.convert' version '4.0.2'
     id 'org.flywaydb.flyway' version '10.21.0'
@@ -26,12 +26,13 @@ configurations {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     // lombok
@@ -46,6 +47,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Structured Logging
+    implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
 
     // Documentation - Spring Rest Docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
@@ -62,7 +66,6 @@ dependencies {
     // Database Driver
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-postgresql'
 
     // Monitoring & Metrics
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
@@ -71,15 +74,40 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:testcontainers'
-    testImplementation 'com.redis.testcontainers:testcontainers-redis-junit:1.6.4'
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+ext {
+    set('snippetsDir', file('build/generated-snippets'))
+}
+
+asciidoctor {
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+tasks.register('copyDocs', Copy) {
+    dependsOn asciidoctor
+
+    doFirst {
+        delete('src/main/resources/static/docs/index.html')
+    }
+
+    from file('build/docs/asciidoc')
+    into file('src/main/resources/static/docs')
+}
+
 tasks.named('test') {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+tasks.named('build') {
+    dependsOn copyDocs
 }

@@ -1,6 +1,7 @@
 package com.nlweb.amho.controller;
 
-import com.nlweb.amho.dto.AmhoObject;
+import com.nlweb.core.security.NlwebUserDetails;
+import com.nlweb.amho.dto.AmhoResponse;
 import com.nlweb.amho.facade.AmhoFacade;
 import com.nlweb.common.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,32 +13,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Slf4j
-@RestController
-@RequestMapping("/amhos")
-@RequiredArgsConstructor
 @Validated
+@RestController
+@RequestMapping("/api/amhos")
+@RequiredArgsConstructor
 public class AmhoController {
 
     private final AmhoFacade amhoFacade;
 
+    /**
+     * GET
+     * /api/amhos
+     * 현재 인증 코드 반환 */
     @GetMapping
-    public ResponseEntity<ApiResponse<AmhoObject>> getCurrentAmho(
-            HttpServletRequest httpRequest) {
-        AmhoObject response = amhoFacade.getActiveAmho();
+    public ResponseEntity<ApiResponse<AmhoResponse>> getCurrentAmho(
+            @AuthenticationPrincipal NlwebUserDetails principal,
+            HttpServletRequest httpRequest
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiResponse.success(response));
+                .body(ApiResponse.success(amhoFacade.getActiveAmho(
+                        principal.getUserId(),
+                        principal.getUsername()
+                )));
     }
 
+    /**
+     *  POST
+     *  /api/amhos
+     *  현재 인증 코드 리셋 */
     @PostMapping
-    public ResponseEntity<ApiResponse<AmhoObject>> resetCurrentAmho(
-            HttpServletRequest httpRequest) {
-        AmhoObject response = amhoFacade.resetAmho();
+    public ResponseEntity<ApiResponse<AmhoResponse>> resetCurrentAmho(
+            @AuthenticationPrincipal NlwebUserDetails principal,
+            HttpServletRequest httpRequest
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+                .body(ApiResponse.success(amhoFacade.resetAmho(
+                        principal.getUserId(),
+                        principal.getUsername()
+                )));
     }
 }
