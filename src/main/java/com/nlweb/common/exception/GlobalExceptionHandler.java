@@ -4,6 +4,7 @@ import com.nlweb.auth.exception.*;
 import com.nlweb.admin.exception.*;
 import com.nlweb.user.exception.*;
 import com.nlweb.amho.exception.*;
+import com.nlweb.program.exception.*;
 import com.nlweb.common.dto.ApiResponse;
 import com.nlweb.common.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -125,6 +126,15 @@ public class GlobalExceptionHandler {
             InvalidUserOperationException ex, HttpServletRequest request) {
         log.warn("잘못된 사용자 접근: {}", ex.getMessage());
         return buildErrorResponse("INVALID_USER_OPERATION", ex.getMessage(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    // ========== Program 관련 예외 ==========
+
+    @ExceptionHandler(ProgramNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleProgramNotFound(
+            ProgramNotFoundException ex, HttpServletRequest request) {
+        log.warn("프로그램을 찾을 수 없음: {}", ex.getMessage());
+        return buildErrorResponse("PROGRAM_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
     // ========== 입력 검증 예외 ==========
