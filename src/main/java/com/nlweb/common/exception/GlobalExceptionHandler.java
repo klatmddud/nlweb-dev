@@ -4,9 +4,6 @@ import com.nlweb.auth.exception.*;
 import com.nlweb.admin.exception.*;
 import com.nlweb.user.exception.*;
 import com.nlweb.amho.exception.*;
-import com.nlweb.event.exception.*;
-import com.nlweb.ensemble.exception.*;
-import com.nlweb.timeslot.exception.*;
 import com.nlweb.common.dto.ApiResponse;
 import com.nlweb.common.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -128,47 +125,6 @@ public class GlobalExceptionHandler {
             InvalidUserOperationException ex, HttpServletRequest request) {
         log.warn("잘못된 사용자 접근: {}", ex.getMessage());
         return buildErrorResponse("INVALID_USER_OPERATION", ex.getMessage(), HttpStatus.BAD_REQUEST, request);
-    }
-
-    // ========== Event 관련 예외 ==========
-
-    @ExceptionHandler(EventNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handleEventNotFound(
-            EventNotFoundException ex, HttpServletRequest request) {
-        log.warn("이벤트를 찾을 수 없음: {}", ex.getMessage());
-        return buildErrorResponse("EVENT_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
-    }
-
-    @ExceptionHandler(InvalidEventOperationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleInvalidEventOperation(
-            InvalidEventOperationException ex, HttpServletRequest request) {
-        log.warn("잘못된 이벤트 요청: {}", ex.getMessage());
-        return buildErrorResponse("INVALID_EVENT_OPERATION", ex.getMessage(), HttpStatus.BAD_REQUEST, request);
-    }
-
-    // ========== Ensemble 관련 예외 ==========
-
-    @ExceptionHandler(EnsembleNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handleEnsembleNotFound(
-            EnsembleNotFoundException ex, HttpServletRequest request) {
-        log.warn("합주를 찾을 수 없음: {}", ex.getMessage());
-        return buildErrorResponse("ENSEMBLE_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
-    }
-
-    @ExceptionHandler(InvalidEnsembleOperationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleInvalidEnsembleOperation(
-            InvalidEnsembleOperationException ex, HttpServletRequest request) {
-        log.warn("잘못된 합주 요청: {}", ex.getMessage());
-        return buildErrorResponse("INVALID_ENSEMBLE_OPERATION", ex.getMessage(), HttpStatus.BAD_REQUEST, request);
-    }
-
-    // ========== Timeslot 관련 예외 ==========
-
-    @ExceptionHandler(InvalidTimeslotOperationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleInvalidTimeslotOperation(
-            InvalidTimeslotOperationException ex, HttpServletRequest request) {
-        log.warn("잘못된 시간표 요청: {}", ex.getMessage());
-        return buildErrorResponse("INVALID_TIMESLOT_OPERATION", ex.getMessage(), HttpStatus.BAD_REQUEST, request);
     }
 
     // ========== 입력 검증 예외 ==========

@@ -107,7 +107,7 @@ class UserControllerTest extends RestDocumentation {
                 LocalDateTime.now()
         );
 
-        doReturn(response).when(userFacade).softDeleteUser(any(), anyString());
+        doReturn(response).when(userFacade).deleteUser(any(), anyString());
 
         mockMvc.perform(delete("/api/users/me")
                         .with(authentication(userAuthentication(false))))

@@ -40,12 +40,11 @@ public class UserFacade {
         }
     }
 
+    /** 사용자 정보 업데이트 */
     @Transactional
     public UserResponse updateProfile(UUID userId, String username, UpdateUserRequest request) {
         try {
-            User user = userQueryService.getByUsername(username);
-            
-            User updatedUser = userCommandService.update(user.getId(), request);
+            User updatedUser = userCommandService.update(userId, request);
 
             UserLogger.logSuccessUserEvent("update_user_profile", userId, username, null);
             
@@ -57,30 +56,17 @@ public class UserFacade {
         }
     }
 
+    /** 사용자 프로필 삭제 */
     @Transactional
-    public UserResponse softDeleteUser(UUID userId, String username) {
+    public UserResponse deleteUser(UUID userId, String username) {
         try {
-            User user = userCommandService.softDelete(userId);
+            User user = userCommandService.delete(userId);
 
             UserLogger.logSuccessUserEvent("soft_delete_user", userId, username, null);
 
             return UserResponse.forProfile(user);
         } catch (Exception e) {
             UserLogger.logFailureUserEvent("soft_delete_user", userId, username, e, null);
-            throw e;
-        }
-    }
-
-    @Transactional
-    public UserResponse restorationProfile(UUID userId, String username) {
-        try {
-            User user = userCommandService.revive(userId);
-
-            UserLogger.logSuccessUserEvent("restore_user_profile", userId, username, null);
-
-            return UserResponse.forProfile(user);
-        } catch (Exception e) {
-            UserLogger.logFailureUserEvent("restore_user_profile", userId, username, e, null);
             throw e;
         }
     }

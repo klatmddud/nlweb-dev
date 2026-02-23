@@ -59,10 +59,10 @@ public class UserController {
      * /api/users/me
      * 회원 탈퇴 */
     @DeleteMapping("/me")
-    public ResponseEntity<ApiResponse<UserResponse>> softDeleteMyProfile(
+    public ResponseEntity<ApiResponse<UserResponse>> deleteMyProfile(
             @AuthenticationPrincipal NlwebUserDetails principal
     ) {
-        UserResponse response = userFacade.softDeleteUser(principal.getUserId(), principal.getUsername());
+        UserResponse response = userFacade.deleteUser(principal.getUserId(), principal.getUsername());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(response));

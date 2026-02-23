@@ -101,28 +101,11 @@ public class UserCommandService {
     }
 
     /** 사용자 소프트 삭제 */
-    public User softDelete(UUID id) {
+    public User delete(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id: " + id));
         userRepository.delete(user);
         log.info("사용자 삭제: {}", user.getUsername());
         return user;
-    }
-
-    /** 사용자 영구 삭제 */
-    public void hardDelete(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id: " + id));
-        userRepository.delete(user);
-        log.info("사용자 영구 삭제: {}", user.getUsername());
-    }
-
-    /** 소프트 삭제된 사용자 복구 */
-    public User revive(UUID id) {
-        throw new InvalidUserOperationException("현재 users 스키마에서는 삭제 사용자 복구를 지원하지 않습니다.");
-    }
-
-    /** 마지막 로그인 시간 업데이트 */
-    public void updateLastLogin(UUID id) {
-        log.debug("users 스키마에 last_login_at 컬럼이 없어 로그인 시간 업데이트를 건너뜁니다. userId={}", id);
     }
 
     // ================== 중복 검사 헬퍼 ==================
