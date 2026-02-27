@@ -93,6 +93,24 @@ include::{snippets}/auth/login/http-request.adoc[]
 .Response
 include::{snippets}/auth/login/http-response.adoc[]
 
+=== POST /auth/refresh
+리프레시 토큰을 이용해 새 토큰을 발급 받습니다.
+
+.Request
+include::{snippets}/auth/refresh-token/http-request.adoc[]
+
+.Response
+include::{snippets}/auth/refresh-token/http-response.adoc[]
+
+=== POST /auth/logout
+로그아웃합니다.
+
+.Request
+include::{snippets}/auth/logout/http-request.adoc[]
+
+.Response
+include::{snippets}/auth/logout/http-response.adoc[]
+
 [[user-api]]
 == User API
 
@@ -134,70 +152,3 @@ include::{snippets}/users/search-users/http-request.adoc[]
 .Response
 include::{snippets}/users/search-users/http-response.adoc[]
 
-[[event-api]]
-== Event API
-
-이벤트 생성/조회/수정/삭제 및 활성 상태 관리를 위한 API 입니다.
-
-=== POST /events
-새 이벤트를 생성합니다.
-
-.Request
-include::{snippets}/events/create-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/create-event/http-response.adoc[]
-
-=== GET /events/{eventId}
-이벤트 상세를 조회합니다.
-
-.Request
-include::{snippets}/events/get-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/get-event/http-response.adoc[]
-
-=== GET /events
-이벤트 목록을 조회합니다.
-
-.Request
-include::{snippets}/events/get-events/http-request.adoc[]
-
-.Response
-include::{snippets}/events/get-events/http-response.adoc[]
-
-=== PATCH /events/{eventId}
-이벤트 정보를 수정합니다.
-
-.Request
-include::{snippets}/events/update-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/update-event/http-response.adoc[]
-
-=== PATCH /events/{eventId}/activate
-이벤트를 활성화합니다.
-
-.Request
-include::{snippets}/events/activate-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/activate-event/http-response.adoc[]
-
-=== PATCH /events/{eventId}/deactivate
-이벤트를 비활성화합니다.
-
-.Request
-include::{snippets}/events/deactivate-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/deactivate-event/http-response.adoc[]
-
-=== DELETE /events/{eventId}
-이벤트를 삭제합니다.
-
-.Request
-include::{snippets}/events/delete-event/http-request.adoc[]
-
-.Response
-include::{snippets}/events/delete-event/http-response.adoc[]

@@ -6,6 +6,7 @@ import com.nlweb.user.dto.response.UserResponse;
 import com.nlweb.user.entity.User;
 import com.nlweb.user.enums.UserSessionType;
 import com.nlweb.user.log.UserLogger;
+import com.nlweb.program.service.ProgramUserCommandService;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class UserFacade {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final ProgramUserCommandService programUserCommandService;
 
     /** username으로 프로필 조회 */
     public UserResponse getProfile(UUID userId, String username) {
@@ -60,13 +62,17 @@ public class UserFacade {
     @Transactional
     public UserResponse deleteUser(UUID userId, String username) {
         try {
+            // 프로그램 참가 삭제
+            programUserCommandService.deleteAllByUserId(userId);
+
+            // 사용자 삭제
             User user = userCommandService.delete(userId);
 
-            UserLogger.logSuccessUserEvent("soft_delete_user", userId, username, null);
+            UserLogger.logSuccessUserEvent("delete_user", userId, username, null);
 
             return UserResponse.forProfile(user);
         } catch (Exception e) {
-            UserLogger.logFailureUserEvent("soft_delete_user", userId, username, e, null);
+            UserLogger.logFailureUserEvent("delete_user", userId, username, e, null);
             throw e;
         }
     }

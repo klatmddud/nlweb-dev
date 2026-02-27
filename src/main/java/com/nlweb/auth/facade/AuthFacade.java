@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.Map;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,8 +38,6 @@ public class AuthFacade {
     @Transactional
     public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) {
         try {
-            // Registration attempt will be logged on success/failure
-
             Amho amho = amhoQueryService.getActiveAmho();
 
             if (!request.amhoCode().equals(amho.getUserCode())) {

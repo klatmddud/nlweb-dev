@@ -1,7 +1,7 @@
 create table if not exists admins (
     id uuid not null primary key,
     user_id uuid not null unique,
-    role varchar(100) not null unique,
+    role varchar(100) not null,
     created_at timestamp with time zone not null default current_timestamp,
     updated_at timestamp with time zone not null default current_timestamp,
     version bigint not null default 0,

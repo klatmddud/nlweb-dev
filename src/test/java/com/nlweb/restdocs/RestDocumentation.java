@@ -21,4 +21,5 @@ public abstract class RestDocumentation {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
 }

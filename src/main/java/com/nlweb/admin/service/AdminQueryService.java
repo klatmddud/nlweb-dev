@@ -2,7 +2,7 @@ package com.nlweb.admin.service;
 
 import com.nlweb.admin.exception.AdminNotFoundException;
 import com.nlweb.admin.repository.AdminRepository;
-import com.nlweb.admin.dto.object.AdminObject;
+import com.nlweb.admin.entity.Admin;
 import com.nlweb.user.repository.UserRepository;
 import com.nlweb.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -22,29 +22,19 @@ public class AdminQueryService {
     private final UserRepository userRepository;
 
     /** Admin Id로 찾기 */
-    public AdminObject getById(UUID id) {
-        return AdminObject.fromEntity(
-                adminRepository.findById(id)
-                        .orElseThrow(() -> new AdminNotFoundException("id: " + id))
-        );
+    public Admin getById(UUID id) {
+        return  adminRepository.findById(id).orElseThrow(() -> new AdminNotFoundException("id: " + id));
     }
 
     /** username으로 찾기 */
-    public AdminObject getByUsername(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AdminNotFoundException("username: " + username));
-
-        return AdminObject.fromEntity(
-                adminRepository.findByUser(user)
-                .orElseThrow(() -> new AdminNotFoundException("username: " + username))
-        );
+    public Admin getByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AdminNotFoundException("username: " + username));
+        return adminRepository.findByUser(user).orElseThrow(() -> new AdminNotFoundException("username: " + username));
     }
 
     /** 전체 관리자 조회 */
-    public List<AdminObject> getAll() {
-        return adminRepository.findAll().stream()
-                .map(AdminObject::fromEntity)
-                .toList();
+    public List<Admin> getAll() {
+        return adminRepository.findAll().stream().toList();
     }
 
 }

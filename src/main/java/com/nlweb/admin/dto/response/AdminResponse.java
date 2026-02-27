@@ -1,8 +1,8 @@
 package com.nlweb.admin.dto.response;
 
+import com.nlweb.admin.entity.Admin;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.nlweb.admin.dto.object.AdminObject;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,17 +18,14 @@ public record AdminResponse(
         LocalDateTime updatedAt
 ) {
 
-    public static AdminResponse forUpdateRole(AdminObject adminObject) {
-        return from(adminObject);
-    }
-
-    public static AdminResponse from(AdminObject adminObject) {
+    public static AdminResponse forProfile(Admin admin) {
         return new AdminResponse(
-                adminObject.getId(),
-                adminObject.getUser().getUsername(),
-                adminObject.getRole(),
-                adminObject.getCreatedAt(),
-                adminObject.getUpdatedAt()
+                admin.getId(),
+                admin.getUser().getUsername(),
+                admin.getRole(),
+                admin.getCreatedAt(),
+                admin.getUpdatedAt()
         );
     }
+
 }

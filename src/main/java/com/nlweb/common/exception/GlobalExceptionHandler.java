@@ -137,6 +137,29 @@ public class GlobalExceptionHandler {
         return buildErrorResponse("PROGRAM_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(ProgramUserNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleProgramUserNotFound(
+            ProgramUserNotFoundException ex, HttpServletRequest request) {
+        log.warn("프로그램 참가자를 찾을 수 없음: {}", ex.getMessage());
+        return buildErrorResponse("PROGRAM_USER_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DuplicateProgramUserException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDuplicateProgramUser(
+            DuplicateProgramUserException ex, HttpServletRequest request
+    ) {
+        log.warn("이미 존재하는 프로그램 참가자: {}", ex.getMessage());
+        return buildErrorResponse("DUPLICATE_PROGRAM_USER", ex.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(ProgramApplyNotAvailableException.class)
+    public ResponseEntity<ApiResponse<Object>> handleProgramApplyNotAvailable(
+            ProgramApplyNotAvailableException ex, HttpServletRequest request
+    ) {
+        log.warn("현재 프로그램 관련 신청이 가능하지 않음");
+        return buildErrorResponse("PROGRAM_APPLY_NOT_AVAILABLE", ex.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
     // ========== 입력 검증 예외 ==========
 
     /** @Valid 검증 실패 */

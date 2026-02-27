@@ -47,6 +47,6 @@ CLAUDE.md
 docker/docker-compose.local.yml
 docker/Dockerfile.local
 
-PROJECT_STRUCTURE.md
+CODEX.md
 
 logs/*

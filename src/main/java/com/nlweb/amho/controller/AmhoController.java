@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class AmhoController {
      * /api/amhos
      * 현재 인증 코드 반환 */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<AmhoResponse>> getCurrentAmho(
             @AuthenticationPrincipal NlwebUserDetails principal,
             HttpServletRequest httpRequest
@@ -47,6 +49,7 @@ public class AmhoController {
      *  /api/amhos
      *  현재 인증 코드 리셋 */
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<AmhoResponse>> resetCurrentAmho(
             @AuthenticationPrincipal NlwebUserDetails principal,
             HttpServletRequest httpRequest

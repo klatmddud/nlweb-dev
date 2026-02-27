@@ -3,6 +3,8 @@ package com.nlweb.core.filter;
 import com.nlweb.common.util.IpUtils;
 import com.nlweb.common.util.JwtUtils;
 import com.nlweb.common.log.SecurityLogger;
+import com.nlweb.core.security.NlwebUserDetails;
+import com.nlweb.core.security.NlwebUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +15,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -31,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final CacheManager cacheManager;
+    private final NlwebUserDetailsService nlwebUserDetailsService;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
@@ -59,13 +59,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (jwtUtils.validateToken(jwt)) {
                     String username = jwtUtils.getUsername(jwt);
-                    UUID userId = jwtUtils.getUserId(jwt);
+                    NlwebUserDetails userDetails = nlwebUserDetailsService.loadUserByUsername(username);
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
-                                    username,
+                                    userDetails,
                                     null,
-                                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                                    userDetails.getAuthorities()
                             );
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 
                     SecurityLogger.logAuthenticationSuccess(username, ipAddress, userAgent);
-                    log.debug("JWT 인증 성공: username = {}, userId = {}", username, userId);
+                    log.debug("JWT 인증 성공: username = {}", username);
                 } else {
                     SecurityLogger.logAuthenticationFailure("invalid_token", ipAddress, userAgent, tokenPrefix);
                     log.debug("유효하지 않은 JWT 토큰");

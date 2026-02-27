@@ -45,8 +45,9 @@ public class ProgramCommandService {
     }
 
     /** 프로그램 정보 수정 */
-    public Program update(UUID id, UpdateProgramRequest request) {
-        Program program = programRepository.findById(id).orElseThrow(() -> new ProgramNotFoundException("id: " + id));
+    public Program update(UpdateProgramRequest request) {
+        Program program = programRepository.findById(request.programId())
+                .orElseThrow(() -> new ProgramNotFoundException("id: " + request.programId()));
 
         if (request.title() != null) {
             program.setTitle(request.title());
@@ -78,7 +79,7 @@ public class ProgramCommandService {
     }
 
     /** 프로그램 삭제 */
-    public Program delete(UUID id) {
+    public Program delete(UUID id)  {
         Program program = programRepository.findById(id).orElseThrow(() -> new ProgramNotFoundException("id: " + id));
 
         programRepository.delete(program);

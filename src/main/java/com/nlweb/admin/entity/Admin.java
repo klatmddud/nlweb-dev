@@ -32,7 +32,7 @@ public class Admin implements Serializable {
     private User user;
 
     @Setter
-    @Column(name = "role", nullable = false, unique = true)
+    @Column(name = "role", nullable = false)
     private String role;
 
     @CreatedDate
