@@ -68,6 +68,7 @@ public class ProgramController {
     }
 
     /** 프로그램 참여 취소 */
+    @DeleteMapping("/apply")
     public ResponseEntity<ApiResponse<ProgramUserResponse>> cancelProgramApplication(
             @AuthenticationPrincipal NlwebUserDetails principal,
             @RequestBody DeleteProgramUserRequest request

@@ -62,6 +62,9 @@ public class Program implements Serializable {
     @Column(name = "timeslot_apply_end_at")
     private LocalDateTime timeslotApplyEndAt;
 
+    @Column(name = "program_user_count", nullable = false)
+    private Integer programUserCount = 0;
+
     @CreatedDate
     @Column(name = "created_at",  nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -95,6 +98,22 @@ public class Program implements Serializable {
         this.sessionApplyEndAt = sessionApplyEndAt;
         this.timeslotApplyStartAt = timeslotApplyStartAt;
         this.timeslotApplyEndAt = timeslotApplyEndAt;
+        this.programUserCount = 0;
+    }
+
+    public void increaseProgramUserCount() {
+        if (this.programUserCount == null) {
+            this.programUserCount = 0;
+        }
+        this.programUserCount++;
+    }
+
+    public void decreaseProgramUserCount() {
+        if (this.programUserCount == null || this.programUserCount <= 0) {
+            this.programUserCount = 0;
+            return;
+        }
+        this.programUserCount--;
     }
 
 }

@@ -48,7 +48,7 @@ public class ProgramFacade {
     /** 프로그램 참여자 생성 */
     public ProgramUserResponse createNewProgramUser(NlwebUserDetails principal, CreateProgramUserRequest request) {
 
-        if (programQueryService.isProgramApplyAvailable(request.programId())) {
+        if (!programQueryService.isProgramApplyAvailable(request.programId())) {
             throw new ProgramApplyNotAvailableException("현재 프로그램 참가 신청이 불가합니다.");
         }
 

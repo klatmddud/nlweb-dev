@@ -152,3 +152,84 @@ include::{snippets}/users/search-users/http-request.adoc[]
 .Response
 include::{snippets}/users/search-users/http-response.adoc[]
 
+[[admin-api]]
+== Admin API
+
+집부 권한 부여/박탈, 조회 기능을 위한 API 입니다.
+
+=== POST /admins
+Amho의 adminCode를 이용해 집부 권한을 부여합니다.
+
+.Request
+include::{snippets}/admins/get-admin-authority/http-request.adoc[]
+
+.Response
+include::{snippets}/admins/get-admin-authority/http-response.adoc[]
+
+=== GET /admins
+전체 집부 리스트를 반환합니다.
+
+.Request
+include::{snippets}/admins/get-all-admins/http-request.adoc[]
+
+.Response
+include::{snippets}/admins/get-all-admins/http-response.adoc[]
+
+=== PATCH /admins/me
+내 집부 역할(회장, 관리부장 등)을 변경합니다.
+
+.Request
+include::{snippets}/admins/update-my-admin-role/http-request.adoc[]
+
+.Response
+include::{snippets}/admins/update-my-admin-role/http-response.adoc[]
+
+=== DELETE /admins/me
+내 집부 권한을 제거합니다.
+
+.Request
+include::{snippets}/admins/revoke-my-admin-authority/http-request.adoc[]
+
+.Response
+include::{snippets}/admins/revoke-my-admin-authority/http-response.adoc[]
+
+[[program-api]]
+== Program API
+
+프로그램 생성, 수정, 참가와 같은 프로그램 제어 기능을 위한 API 입니다.
+
+=== POST /programs
+새 프로그램을 생성합니다.
+
+.Request
+include::{snippets}/programs/create-new-program/http-request.adoc[]
+
+.Response
+include::{snippets}/programs/create-new-program/http-response.adoc[]
+
+=== PATCH /programs
+프로그램 정보를 변경합니다.
+
+.Request
+include::{snippets}/programs/update-program/http-request.adoc[]
+
+.Response
+include::{snippets}/programs/update-program/http-response.adoc[]
+
+=== POST /programs/apply
+프로그램에 참가 신청합니다.
+
+.Request
+include::{snippets}/programs/apply-program/http-request.adoc[]
+
+.Response
+include::{snippets}/programs/apply-program/http-response.adoc[]
+
+=== DELETE /programs/apply
+프로그램 참가 신청을 취소합니다.
+
+.Request
+include::{snippets}/programs/cancel-program-application/http-request.adoc[]
+
+.Response
+include::{snippets}/programs/cancel-program-application/http-response.adoc[]

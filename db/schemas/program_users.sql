@@ -1,8 +1,11 @@
 create table if not exists program_users (
     id uuid not null primary key,
     user_id uuid not null,
-    program_id uuid not null unique,
+    program_id uuid not null,
     created_at timestamp with time zone not null default current_timestamp,
+
+    constraint uq_program_users_user_program
+        unique (user_id, program_id),
 
     constraint fk_program_users_user
         foreign key (user_id) references users(id)

@@ -8,6 +8,7 @@ import com.nlweb.admin.dto.request.UpdateMyRoleRequest;
 import com.nlweb.admin.dto.response.AdminResponse;
 import com.nlweb.admin.service.AdminCommandService;
 import com.nlweb.admin.service.AdminQueryService;
+import com.nlweb.user.service.UserCommandService;
 import com.nlweb.core.security.NlwebUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +26,15 @@ public class AdminFacade {
     private final AdminCommandService adminCommandService;
     private final AdminQueryService adminQueryService;
     private final AmhoQueryService amhoQueryService;
+    private final UserCommandService userCommandService;
 
     /** 집부 권한 부여 */
     public AdminResponse grantAdminAuthority(NlwebUserDetails principal, CreateAdminRequest request) {
         if (!request.amhoCode().equals(amhoQueryService.getActiveAmho().getAdminCode())) {
             throw new InvalidAmhoException("유효하지 않은 등록 코드입니다.");
         }
+
+        userCommandService.setIsAdmin(principal.getUserId(), true);
 
         return AdminResponse.forProfile(
                 adminCommandService.create(principal.getUserId())
@@ -67,6 +71,7 @@ public class AdminFacade {
 
     /** 내 집부 권한 박탈 */
     public void revokeMyAuthority(NlwebUserDetails principal) {
+        userCommandService.setIsAdmin(principal.getUserId(), false);
         adminCommandService.delete(principal.getUsername());
     }
 }

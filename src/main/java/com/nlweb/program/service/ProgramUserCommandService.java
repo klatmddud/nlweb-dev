@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 
@@ -39,6 +38,7 @@ public class ProgramUserCommandService {
                 .program(program)
                 .build();
 
+        program.increaseProgramUserCount();
         ProgramUser newProgramUser = programUserRepository.save(programUser);
 
         log.info("새 프로그램 참가자 생성 완료: userId = {}, programId = {}", userId, programId);
@@ -50,6 +50,7 @@ public class ProgramUserCommandService {
     public ProgramUser delete(UUID id) {
         ProgramUser programUser = programUserRepository.findById(id).orElseThrow(() -> new ProgramUserNotFoundException("id: " + id));
 
+        programUser.getProgram().decreaseProgramUserCount();
         programUserRepository.delete(programUser);
 
         log.info("프로그램 참가자 삭제 완료: id = {}", id);
@@ -60,6 +61,9 @@ public class ProgramUserCommandService {
     /** 사용자 ID로 모든 프로그램 참가 제거 */
     public void deleteAllByUserId(UUID userId) {
         List<ProgramUser> programUsers = programUserRepository.findByUserId(userId);
+        for (ProgramUser programUser : programUsers) {
+            programUser.getProgram().decreaseProgramUserCount();
+        }
         programUserRepository.deleteAll(programUsers);
     }
 }

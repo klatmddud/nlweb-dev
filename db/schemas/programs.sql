@@ -9,9 +9,10 @@ create table if not exists programs (
     session_apply_end_at timestamp with time zone,
     timeslot_apply_start_at timestamp with time zone,
     timeslot_apply_end_at timestamp with time zone,
+    program_user_count integer not null default 0,
     created_at timestamp with time zone not null default current_timestamp,
     updated_at timestamp with time zone not null default current_timestamp,
-    version integer not null default 0
+    version integer not null default 1
 );
 
 create index idx_programs_title on programs(title);

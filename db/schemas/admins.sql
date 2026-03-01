@@ -4,7 +4,7 @@ create table if not exists admins (
     role varchar(100) not null,
     created_at timestamp with time zone not null default current_timestamp,
     updated_at timestamp with time zone not null default current_timestamp,
-    version bigint not null default 0,
+    version bigint not null default 1,
 
     constraint fk_admins_user
         foreign key (user_id) references users(id)

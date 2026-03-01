@@ -100,6 +100,14 @@ public class UserCommandService {
         return savedUser;
     }
 
+    public void setIsAdmin(UUID id, Boolean authority) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
+
+        user.setIsAdmin(authority);
+        User savedUser = userRepository.save(user);
+        log.info("사용자 집부 권한 변경: {} to {}", user.getIsAdmin(), savedUser.getIsAdmin());
+    }
+
     /** 사용자 소프트 삭제 */
     public User delete(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id: " + id));

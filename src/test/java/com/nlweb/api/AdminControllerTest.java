@@ -17,7 +17,9 @@ import org.springframework.http.MediaType;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -57,6 +59,8 @@ class AdminControllerTest extends RestDocumentation {
         CreateAdminRequest request = new CreateAdminRequest(adminCode);
 
         mockMvc.perform(post("/api/admins")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .header(HttpHeaders.USER_AGENT, "MockMvc-Test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -66,7 +70,47 @@ class AdminControllerTest extends RestDocumentation {
                         preprocessResponse(prettyPrint())));
     }
 
+    @Test
+    @Order(3)
     void getAllAdmins() throws Exception {
-
+        mockMvc.perform(get("/api/admins")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.USER_AGENT, "MockMvc-Test"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("admins/get-all-admins",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
     }
+
+    @Test
+    @Order(4)
+    void updateMyRole() throws Exception {
+        UpdateMyRoleRequest request = new UpdateMyRoleRequest("관리부장");
+
+        mockMvc.perform(patch("/api/admins/me")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.USER_AGENT, "MockMvc-Test")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("admins/update-my-admin-role",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
+    }
+
+    @Test
+    @Order(5)
+    void revokeMyAdminAuthority() throws Exception {
+        mockMvc.perform(delete("/api/admins/me")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.USER_AGENT, "MockMvc-Test"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("admins/revoke-my-admin-authority",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())));
+    }
+
 }

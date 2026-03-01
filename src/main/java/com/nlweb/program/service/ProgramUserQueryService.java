@@ -24,4 +24,10 @@ public class ProgramUserQueryService {
                 .orElseThrow(() -> new ProgramUserNotFoundException("userId: " + userId + " programId: " + programId));
     }
 
+    public void checkIsUserOfProgram(UUID userId, UUID programId) {
+        if (programUserRepository.findByUserIdAndProgramId(userId, programId).isEmpty()) {
+            throw new ProgramUserNotFoundException("userId: " + userId + " programId: " + programId);
+        }
+    }
+
 }

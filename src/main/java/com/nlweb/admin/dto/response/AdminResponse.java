@@ -11,6 +11,7 @@ import java.util.UUID;
 public record AdminResponse(
         UUID id,
         String username,
+        String fullName,
         String role,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         LocalDateTime createdAt,
@@ -22,6 +23,7 @@ public record AdminResponse(
         return new AdminResponse(
                 admin.getId(),
                 admin.getUser().getUsername(),
+                admin.getUser().getFullName(),
                 admin.getRole(),
                 admin.getCreatedAt(),
                 admin.getUpdatedAt()

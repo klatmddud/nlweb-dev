@@ -5,9 +5,13 @@ import com.nlweb.admin.exception.*;
 import com.nlweb.user.exception.*;
 import com.nlweb.amho.exception.*;
 import com.nlweb.program.exception.*;
+import com.nlweb.ensemble.exception.*;
+import com.nlweb.timeslot.exception.*;
 import com.nlweb.common.dto.ApiResponse;
 import com.nlweb.common.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -156,8 +160,52 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleProgramApplyNotAvailable(
             ProgramApplyNotAvailableException ex, HttpServletRequest request
     ) {
-        log.warn("현재 프로그램 관련 신청이 가능하지 않음");
+        log.warn("현재 프로그램 관련 신청이 가능하지 않음: {}", ex.getMessage());
         return buildErrorResponse("PROGRAM_APPLY_NOT_AVAILABLE", ex.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
+    // ========== Ensemble 관련 예외 ==========
+
+    @ExceptionHandler(DuplicateEnsembleException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDuplicateEnsemble(
+            DuplicateEnsembleException ex, HttpServletRequest request
+    ) {
+        log.warn("이미 존재하는 합주: {}", ex.getMessage());
+        return buildErrorResponse("DUPLICATE_ENSEMBLE", ex.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(EnsembleNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleEnsembleNotFound(
+            EnsembleNotFoundException ex, HttpServletRequest request
+    ) {
+        log.warn("합주를 찾을 수 없음: {}", ex.getMessage());
+        return buildErrorResponse("ENSEMBLE_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DuplicateSessionException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDuplicateSession(
+            DuplicateSessionException ex, HttpServletRequest request
+    ) {
+        log.warn("이미 세션이 존재함: {}", ex.getMessage());
+        return buildErrorResponse("DUPLICATE_SESSION", ex.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
+    // ========== Timeslot 관련 예외 ==========
+
+    @ExceptionHandler(TimeslotNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTimeslotNotFound(
+            TimeslotNotFoundException ex, HttpServletRequest request
+    ) {
+        log.warn("시간표를 찾을 수 없음: {}", ex.getMessage());
+        return buildErrorResponse("TIMESLOT_NOT_FOUND", ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(TimeslotOverlapException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTimeslotOverlap(
+            TimeslotOverlapException ex, HttpServletRequest request
+    ) {
+        log.warn("이미 겹치는 시간대가 있음: {}", ex.getMessage());
+        return buildErrorResponse("TIMESLOT_OVERLAP", ex.getMessage(), HttpStatus.CONFLICT, request);
     }
 
     // ========== 입력 검증 예외 ==========

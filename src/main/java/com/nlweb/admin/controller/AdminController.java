@@ -64,7 +64,7 @@ public class AdminController {
      * /api/admins/me/role
      * 내 집부 역할 수정
      */
-    @PatchMapping("/me/role")
+    @PatchMapping("/me")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<AdminResponse>> updateMyRole(
             @Valid @RequestBody UpdateMyRoleRequest requestBody,

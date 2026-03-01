@@ -27,7 +27,7 @@ public class Admin implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
